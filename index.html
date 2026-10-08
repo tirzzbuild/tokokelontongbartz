@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bartz Digital Store - Neon Edition</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Neon Color Palette */
+            --bg-dark: #0a0a1a;
+            --bg-dark-2: #12122a;
+            --neon-cyan: #00f0ff;
+            --neon-pink: #ff00e5;
+            --neon-purple: #a855f7;
+            --neon-green: #00ff88;
+            --neon-yellow: #ffee00;
+            --neon-orange: #ff6600;
+            --text-primary: #ffffff;
+            --text-secondary: #b8b8d4;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(20, 20, 50, 0.6);
+            --card-hover: rgba(30, 30, 70, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 229, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.05) 0%, transparent 60%);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        /* Animated Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* ==================== INTRO LOGIN ANIMATION ==================== */
+        #intro-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a1a2e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s;
+            overflow: hidden;
+        }
+        #intro-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        /* Neon Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: orbFloat 6s ease-in-out infinite;
+        }
+        .orb-1 { width: 300px; height: 300px; background: var(--neon-cyan); top: -100px; left: -100px; }
+        .orb-2 { width: 250px; height: 250px; background: var(--neon-pink); bottom: -80px; right: -80px; animation-delay: 2s; }
+        .orb-3 { width: 200px; height: 200px; background: var(--neon-purple); top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 4s; }
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20px, -20px) scale(1.1); }
+        }
+
+        .intro-logo {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            color: white;
+            box-shadow: 
+                0 0 30px rgba(0, 240, 255, 0.6),
+                0 0 60px rgba(255, 0, 229, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+            animation: pulseLogo 2s infinite alternate, rotateIn 1s ease-out;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes pulseLogo {
+            0% { transform: scale(1); box-shadow: 0 0 30px rgba(0, 240, 255, 0.6), 0 0 60px rgba(255, 0, 229, 0.4); }
+            100% { transform: scale(1.08); box-shadow: 0 0 50px rgba(0, 240, 255, 0.9), 0 0 100px rgba(255, 0, 229, 0.7); }
+        }
+        @keyframes rotateIn {
+            from { transform: rotate(-180deg) scale(0); opacity: 0; }
+            to { transform: rotate(0deg) scale(1); opacity: 1; }
+        }
+        .intro-title {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            animation: fadeInUp 1s ease 0.5s both;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+            position: relative;
+            z-index: 2;
+        }
+        .intro-title span { 
+            color: var(--neon-cyan);
+            text-shadow: 0 0 30px var(--neon-cyan), 0 0 60px var(--neon-pink);
+        }
+        .intro-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            animation: fadeInUp 1s ease 0.8s both;
+            margin-bottom: 45px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+        }
+        .intro-loader {
+            width: 220px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            animation: fadeInUp 1s ease 1s both;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        .intro-loader-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple));
+            border-radius: 10px;
+            animation: loadBar 2.5s ease forwards;
+            box-shadow: 0 0 20px var(--neon-cyan);
+        }
+        @keyframes loadBar {
+            0% { width: 0%; }
+            30% { width: 40%; }
+            70% { width: 80%; }
+            100% { width: 100%; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==================== APP CONTAINER ==================== */
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            background: transparent;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Header */
+        .app-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 50;
+        }
+        .app-header .brand {
+            font-size: 20px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 1px;
+        }
+        .app-header .brand i { 
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan);
+            animation: iconPulse 2s infinite;
+        }
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        .app-header .brand span { 
+            color: var(--neon-pink);
+            text-shadow: 0 0 15px var(--neon-pink);
+        }
+        .header-actions { display: flex; gap: 18px; font-size: 18px; color: var(--text-secondary); }
+        .header-actions i { 
+            cursor: pointer; 
+            transition: 0.3s;
+            padding: 8px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+        }
+        .header-actions i:hover { 
+            color: var(--neon-cyan); 
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Page Content */
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 110px;
+            scroll-behavior: smooth;
+        }
+        .page-content::-webkit-scrollbar { width: 0px; }
+
+        .page { display: none; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==================== DASHBOARD PAGE ==================== */
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.08), rgba(255, 0, 229, 0.08));
+            padding: 22px;
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+        .user-welcome::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        .avatar-lg {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            font-weight: 800;
+            color: white;
+            box-shadow: 
+                0 0 25px rgba(0, 240, 255, 0.5),
+                0 0 50px rgba(255, 0, 229, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        .user-welcome-text { position: relative; z-index: 1; }
+        .user-welcome-text h2 { 
+            font-size: 20px; 
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+        .user-welcome-text h2 span { 
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan);
+        }
+        .user-welcome-text p { font-size: 12px; color: var(--text-secondary); }
+
+        .balance-card {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 24px;
+            padding: 28px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 
+                0 0 30px rgba(0, 240, 255, 0.15),
+                inset 0 0 30px rgba(0, 240, 255, 0.05);
+        }
+        .balance-card::after {
+            content: '';
+            position: absolute;
+            top: -50%; right: -20%;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(255, 0, 229, 0.2), transparent);
+            border-radius: 50%;
+            animation: orbPulse 4s infinite;
+        }
+        @keyframes orbPulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 0.8; }
+        }
+        .balance-label { 
+            font-size: 12px; 
+            color: var(--text-secondary); 
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+        .balance-amount { 
+            font-size: 38px; 
+            font-weight: 900; 
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-green), var(--neon-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.5));
+        }
+        .balance-actions { display: flex; gap: 12px; position: relative; z-index: 1; }
+        .btn-balance {
+            flex: 1;
+            padding: 12px;
+            border-radius: 14px;
+            border: none;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--neon-cyan), #0099ff);
+            color: #0a0a1a;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+        }
+        .btn-primary:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.8);
+        }
+        .btn-outline { 
+            background: transparent; 
+            border: 2px solid var(--neon-pink); 
+            color: var(--neon-pink);
+            box-shadow: 0 0 15px rgba(255, 0, 229, 0.3);
+        }
+        .btn-outline:hover { 
+            background: rgba(255, 0, 229, 0.1);
+            box-shadow: 0 0 30px rgba(255, 0, 229, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: 0.4s;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: linear-gradient(180deg, var(--neon-cyan), var(--neon-pink));
+            border-radius: 3px;
+        }
+        .stat-card:hover { 
+            border-color: var(--neon-cyan); 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.2);
+        }
+        .stat-icon {
+            width: 50px; height: 50px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            position: relative;
+            z-index: 1;
+        }
+        .stat-icon.cyan {
+            background: rgba(0, 240, 255, 0.15);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+        .stat-icon.pink {
+            background: rgba(255, 0, 229, 0.15);
+            color: var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 229, 0.3);
+        }
+        .stat-info .stat-value { 
+            font-size: 18px; 
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+        .stat-info .stat-label { 
+            font-size: 11px; 
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .menu-item {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 18px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.4s;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .menu-item:hover { 
+            border-color: var(--neon-purple);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .menu-item i { 
+            font-size: 24px; 
+            color: var(--neon-purple);
+            text-shadow: 0 0 15px var(--neon-purple);
+            transition: 0.3s;
+        }
+        .menu-item:hover i { 
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-cyan);
+        }
+        .menu-item span { 
+            font-size: 10px; 
+            text-align: center; 
+            color: var(--text-secondary);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .banner-promo {
+            background: linear-gradient(135deg, rgba(255, 0, 229, 0.15), rgba(168, 85, 247, 0.15));
+            border-radius: 20px;
+            padding: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 0, 229, 0.3);
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .banner-promo::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 0, 229, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        .banner-promo h4 { 
+            font-size: 15px; 
+            margin-bottom: 6px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+        }
+        .banner-promo p { 
+            font-size: 11px; 
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+        .banner-promo i { 
+            font-size: 40px; 
+            color: var(--neon-yellow);
+            text-shadow: 0 0 25px var(--neon-yellow);
+            animation: fireFlicker 1.5s infinite;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes fireFlicker {
+            0%, 100% { transform: scale(1) rotate(-5deg); opacity: 1; }
+            50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
+        }
+
+        /* ==================== ORDER PAGE ==================== */
+        .order-category-slider {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding-bottom: 18px;
+            margin-bottom: 20px;
+            scrollbar-width: none;
+        }
+        .order-category-slider::-webkit-scrollbar { display: none; }
+        .cat-btn {
+            flex-shrink: 0;
+            padding: 12px 22px;
+            border-radius: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.4s;
+            white-space: nowrap;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            letter-spacing: 0.5px;
+        }
+        .cat-btn.active {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: #0a0a1a;
+            border-color: transparent;
+            box-shadow: 
+                0 0 25px rgba(0, 240, 255, 0.6),
+                0 0 50px rgba(168, 85, 247, 0.4);
+            transform: scale(1.05);
+        }
+        .cat-btn:hover { 
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .product-item {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.4s;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            animation: slideIn 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+            background: linear-gradient(180deg, var(--neon-cyan), var(--neon-pink));
+            border-radius: 4px;
+            opacity: 0;
+            transition: 0.3s;
+        }
+        .product-item:hover::before { opacity: 1; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .product-item:hover { 
+            border-color: var(--neon-cyan); 
+            background: var(--card-hover);
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);
+        }
+        .product-item-info h4 { 
+            font-size: 14px; 
+            font-weight: 700; 
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+        .product-item-info .p-price { 
+            font-size: 16px; 
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-green), var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.4));
+        }
+        .product-item-info .p-stock { 
+            font-size: 10px; 
+            color: var(--text-secondary); 
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .product-item .arrow-icon { 
+            color: var(--neon-cyan); 
+            font-size: 16px;
+            text-shadow: 0 0 10px var(--neon-cyan);
+            transition: 0.3s;
+        }
+        .product-item:hover .arrow-icon {
+            transform: translateX(5px);
+            color: var(--neon-pink);
+            text-shadow: 0 0 15px var(--neon-pink);
+        }
+
+        /* ==================== PROFILE PAGE ==================== */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 0;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 25px;
+            position: relative;
+        }
+        .avatar-xl {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 42px;
+            font-weight: 900;
+            color: white;
+            box-shadow: 
+                0 0 40px rgba(0, 240, 255, 0.6),
+                0 0 80px rgba(255, 0, 229, 0.4);
+            margin-bottom: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            animation: profilePulse 3s infinite;
+        }
+        @keyframes profilePulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(0, 240, 255, 0.6), 0 0 80px rgba(255, 0, 229, 0.4); }
+            50% { box-shadow: 0 0 60px rgba(0, 240, 255, 0.9), 0 0 120px rgba(255, 0, 229, 0.6); }
+        }
+        .profile-header h2 { 
+            font-size: 22px; 
+            font-weight: 800; 
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+        .profile-header p { 
+            font-size: 13px; 
+            color: var(--text-secondary); 
+            margin-bottom: 15px;
+        }
+        .profile-badges { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .p-badge {
+            font-size: 10px;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .p-badge.green { 
+            background: rgba(0, 255, 136, 0.15); 
+            color: var(--neon-green); 
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+        .p-badge.blue { 
+            background: rgba(0, 240, 255, 0.15); 
+            color: var(--neon-cyan); 
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
+        .history-section-title {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            letter-spacing: 0.5px;
+        }
+        .history-item {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .history-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: linear-gradient(180deg, var(--neon-yellow), var(--neon-orange));
+        }
+        .history-item:hover {
+            border-color: var(--neon-yellow);
+            box-shadow: 0 5px 25px rgba(255, 238, 0, 0.15);
+        }
+        .history-info h4 { 
+            font-size: 13px; 
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .history-info p { 
+            font-size: 11px; 
+            color: var(--text-secondary); 
+        }
+        .history-status {
+            font-size: 10px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .status-success { 
+            background: rgba(0, 255, 136, 0.15); 
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+        .status-pending { 
+            background: rgba(255, 238, 0, 0.15); 
+            color: var(--neon-yellow);
+            border: 1px solid var(--neon-yellow);
+            box-shadow: 0 0 10px rgba(255, 238, 0, 0.3);
+            animation: pendingPulse 2s infinite;
+        }
+        @keyframes pendingPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        .empty-history {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+        .empty-history i { 
+            font-size: 50px; 
+            margin-bottom: 15px; 
+            opacity: 0.4;
+            color: var(--neon-purple);
+            text-shadow: 0 0 20px var(--neon-purple);
+        }
+
+        /* ==================== BOTTOM NAVIGATION ==================== */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            background: rgba(10, 10, 26, 0.7);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 14px 0 22px 0;
+            z-index: 100;
+            border-radius: 30px 30px 0 0;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.4s;
+            position: relative;
+            width: 33%;
+            letter-spacing: 0.5px;
+        }
+        .nav-item i { 
+            font-size: 22px; 
+            transition: 0.4s;
+            padding: 8px;
+            border-radius: 50%;
+        }
+        .nav-item.active { 
+            color: var(--neon-cyan);
+        }
+        .nav-item.active i { 
+            background: rgba(0, 240, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan);
+        }
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+            border-radius: 10px;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+        .nav-item:hover { color: var(--text-primary); }
+
+        /* ==================== MODAL ORDER ==================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 26, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .modal-content {
+            background: linear-gradient(135deg, #12122a, #1a0a2e);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            border-radius: 30px 30px 0 0;
+            padding: 28px;
+            overflow-y: auto;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-top: 2px solid var(--neon-cyan);
+            box-shadow: 0 -20px 60px rgba(0, 240, 255, 0.2);
+            position: relative;
+        }
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            margin-top: 10px;
+        }
+        .modal-header h3 { 
+            font-size: 20px; 
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        .close-btn { 
+            font-size: 28px; 
+            cursor: pointer; 
+            color: var(--text-secondary); 
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            padding-bottom: 3px;
+        }
+        .close-btn:hover { 
+            color: var(--neon-pink);
+            background: rgba(255, 0, 229, 0.1);
+            box-shadow: 0 0 20px rgba(255, 0, 229, 0.4);
+            transform: rotate(90deg);
+        }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { 
+            display: block; 
+            font-size: 12px; 
+            margin-bottom: 8px; 
+            color: var(--text-secondary); 
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'Outfit', sans-serif;
+        }
+        .form-group select:focus, .form-group input:focus { 
+            border-color: var(--neon-cyan); 
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            background: rgba(0, 240, 255, 0.05);
+        }
+        .form-group select option {
+            background: #12122a;
+            color: white;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--neon-green), #00cc6a);
+            color: #0a0a1a;
+            border: none;
+            padding: 17px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            transition: 0.3s;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+        }
+        .btn-submit:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.8);
+        }
+
+        .qris-container {
+            display: none;
+            text-align: center;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            margin-top: 25px;
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+        }
+        .qris-container img {
+            width: 220px;
+            height: 220px;
+            background: white;
+            padding: 12px;
+            border-radius: 16px;
+            margin-bottom: 18px;
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.4);
+        }
+        .qris-container p { 
+            font-size: 12px; 
+            color: var(--text-secondary); 
+            margin-bottom: 18px; 
+            line-height: 1.7; 
+        }
+        .qris-container .btn-confirm {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: #0a0a1a;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 14px;
+            display: block;
+            font-weight: 800;
+            font-size: 14px;
+            transition: 0.3s;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
+        }
+        .qris-container .btn-confirm:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(0, 240, 255, 0.8);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-150px);
+            background: linear-gradient(135deg, var(--neon-green), #00cc6a);
+            color: #0a0a1a;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 800;
+            z-index: 3000;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== INTRO LOGIN SCREEN ==================== -->
+    <div id="intro-screen">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        
+        <div class="intro-logo">
+            <i class="fas fa-bolt"></i>
+        </div>
+        <h1 class="intro-title">BARTZ <span>DIGITAL</span></h1>
+        <p class="intro-subtitle">Premium Digital Marketplace</p>
+        <div class="intro-loader">
+            <div class="intro-loader-bar"></div>
+        </div>
+    </div>
+
+    <!-- ==================== APP CONTAINER ==================== -->
+    <div id="app-container">
+
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <i class="fas fa-bolt"></i> Bartz <span>Digital</span>
+            </div>
+            <div class="header-actions">
+                <i class="fas fa-bell" onclick="showToast('Tidak ada notifikasi baru', 'info')"></i>
+                <i class="fas fa-cog" onclick="showToast('Pengaturan segera hadir', 'info')"></i>
+            </div>
+        </header>
+
+        <!-- Pages Content -->
+        <div class="page-content">
+
+            <!-- ===== DASHBOARD PAGE ===== -->
+            <div id="page-dashboard" class="page active">
+                <div class="user-welcome">
+                    <div class="avatar-lg">B</div>
+                    <div class="user-welcome-text">
+                        <h2>Halo, <span>Bartz!</span> 👋</h2>
+                        <p>Selamat datang di toko digital kami</p>
+                    </div>
+                </div>
+
+                <div class="balance-card">
+                    <div class="balance-label">Saldo Akun</div>
+                    <div class="balance-amount">Rp 0</div>
+                    <div class="balance-actions">
+                        <button class="btn-balance btn-primary" onclick="showToast('Fitur Top Up segera hadir!', 'info')"><i class="fas fa-plus-circle"></i> Top Up</button>
+                        <button class="btn-balance btn-outline" onclick="showToast('Fitur Tarik Saldo segera hadir!', 'info')"><i class="fas fa-arrow-down"></i> Tarik</button>
+                    </div>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-icon cyan">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">Transaksi</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon pink">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value">Rp 0</div>
+                            <div class="stat-label">Komisi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-grid">
+                    <div class="menu-item" onclick="switchPage('order')">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Order</span>
+                    </div>
+                    <div class="menu-item" onclick="showToast('Fitur Riwayat segera hadir!', 'info')">
+                        <i class="fas fa-history"></i>
+                        <span>Riwayat</span>
+                    </div>
+                    <div class="menu-item" onclick="showToast('Fitur Voucher segera hadir!', 'info')">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Voucher</span>
+                    </div>
+                    <div class="menu-item" onclick="showToast('Fitur Bantuan segera hadir!', 'info')">
+                        <i class="fas fa-headset"></i>
+                        <span>Bantuan</span>
+                    </div>
+                </div>
+
+                <div class="banner-promo">
+                    <div>
+                        <h4>🔥 Promo Spesial Hari Ini</h4>
+                        <p>Diskon 10% untuk semua produk Akun Killer</p>
+                    </div>
+                    <i class="fas fa-fire"></i>
+                </div>
+            </div>
+
+            <!-- ===== ORDER PAGE ===== -->
+            <div id="page-order" class="page">
+                <div class="order-category-slider">
+                    <button class="cat-btn active" onclick="loadCategory('killer', this)">Akun Killer</button>
+                    <button class="cat-btn" onclick="loadCategory('killerRat', this)">K1LLER X RAT</button>
+                    <button class="cat-btn" onclick="loadCategory('tobaDeath', this)">Toba Death</button>
+                    <button class="cat-btn" onclick="loadCategory('driveGetsuzo', this)">Drive Getsuzo</button>
+                    <button class="cat-btn" onclick="loadCategory('panel', this)">Panel Pterodactyl</button>
+                    <button class="cat-btn" onclick="loadCategory('jasa', this)">Jasa & Script</button>
+                </div>
+
+                <div id="product-list" class="product-list">
+                    <!-- Diisi oleh JavaScript -->
+                </div>
+            </div>
+
+            <!-- ===== PROFILE PAGE ===== -->
+            <div id="page-profile" class="page">
+                <div class="profile-header">
+                    <div class="avatar-xl">B</div>
+                    <h2>Bartz User</h2>
+                    <p>ele743145@gmail.com</p>
+                    <div class="profile-badges">
+                        <span class="p-badge green"><i class="fas fa-shield-alt"></i> Member Resmi</span>
+                        <span class="p-badge blue"><i class="fab fa-google"></i> Google Login</span>
+                    </div>
+                </div>
+
+                <div class="history-section-title">
+                    <span>Riwayat Order</span>
+                    <span style="font-size: 12px; color: var(--neon-pink); cursor: pointer; font-weight: 700;" onclick="clearHistory()">Hapus</span>
+                </div>
+                <div id="history-list">
+                    <!-- Diisi oleh JavaScript -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== BOTTOM NAVIGATION ==================== -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchPage('dashboard', this)">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-item" onclick="switchPage('order', this)">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Order</span>
+            </button>
+            <button class="nav-item" onclick="switchPage('profile', this)">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- ==================== MODAL ORDER ==================== -->
+    <div id="order-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-shopping-bag" style="color: var(--neon-cyan);"></i> Form Order</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Produk yang dipilih</label>
+                <input type="text" id="selected-product" readonly style="background: rgba(0, 240, 255, 0.1); color: var(--neon-cyan); font-weight: 800; border-color: var(--neon-cyan);">
+            </div>
+            <div class="form-group">
+                <label>Pilih Paket / Role</label>
+                <select id="package-select">
+                    <!-- Diisi oleh JS -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nama / Username</label>
+                <input type="text" id="buyer-name" placeholder="Masukkan nama anda">
+            </div>
+            <div class="form-group">
+                <label>No. WhatsApp</label>
+                <input type="tel" id="buyer-phone" placeholder="Contoh: 08123456789">
+            </div>
+            
+            <button class="btn-submit" onclick="processOrder()">
+                <i class="fab fa-whatsapp"></i> Order via WhatsApp
+            </button>
+
+            <div id="qris-section" class="qris-container">
+                <h4 style="color: var(--neon-green); margin-bottom: 15px; font-weight: 800;"><i class="fas fa-qrcode"></i> Pembayaran QRIS</h4>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" alt="QRIS">
+                <p>Silakan scan QRIS di atas untuk melakukan pembayaran.<br>Setelah transfer, konfirmasi ke Admin.</p>
+                <a href="https://wa.me/6281313416418?text=Halo%20Admin,%20saya%20sudah%20transfer%20untuk%20pesanan%20saya." target="_blank" class="btn-confirm">
+                    <i class="fas fa-check-circle"></i> Konfirmasi Pembayaran
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Berhasil!</span>
+    </div>
+
+    <script>
+        // ==================== DATA PRODUK (DIPISAHKAN) ====================
+        const products = {
+            killer: {
+                title: "Akun Killer",
+                items: [
+                    { name: "New Update Apk Bug - 5K (7 Hari)", price: 5000 },
+                    { name: "New Update Apk Bug - 10K (20 Hari)", price: 10000 },
+                    { name: "New Update Apk Bug - 15K (40 Hari)", price: 15000 },
+                    { name: "New Update Apk Bug - 25K (Full Up)", price: 25000 },
+                    { name: "Role Reseller", price: 40000 },
+                    { name: "Role VVIP", price: 50000 },
+                    { name: "Role Owner", price: 70000 },
+                    { name: "Role Moderator", price: 90000 },
+                    { name: "Role TK", price: 110000 },
+                    { name: "Role PT", price: 130000 },
+                    { name: "Role Founder", price: 150000 },
+                    { name: "Role Developer", price: 200000 },
+                    { name: "Role DEV", price: 250000 }
+                ]
+            },
+            killerRat: {
+                title: "K1LLER X RAT",
+                items: [
+                    { name: "The K1LLER X RAT APPS - Member", price: 25000 },
+                    { name: "The K1LLER X RAT APPS - Reseller", price: 50000 },
+                    { name: "The K1LLER X RAT APPS - VIP", price: 100000 },
+                    { name: "The K1LLER X RAT APPS - Owner", price: 150000 },
+                    { name: "The K1LLER X RAT APPS - Developer", price: 200000 }
+                ]
+            },
+            tobaDeath: {
+                title: "Toba Death",
+                items: [
+                    { name: "New Release Apk Bug Toba Death - Member (5K-25K)", price: 5000 },
+                    { name: "New Release Apk Bug Toba Death - Reseller (30K-40K)", price: 30000 },
+                    { name: "New Release Apk Bug Toba Death - VIP (45K)", price: 45000 },
+                    { name: "New Release Apk Bug Toba Death - Owner (50K)", price: 50000 }
+                ]
+            },
+            driveGetsuzo: {
+                title: "Drive Getsuzo",
+                items: [
+                    { name: "New Release Apk Bug Drive Getsuzo - Member (10K-25K)", price: 10000 },
+                    { name: "New Release Apk Bug Drive Getsuzo - Reseller (50K)", price: 50000 },
+                    { name: "New Release Apk Bug Drive Getsuzo - Partner (60K)", price: 60000 },
+                    { name: "New Release Apk Bug Drive Getsuzo - Moderator (70K)", price: 70000 }
+                ]
+            },
+            panel: {
+                title: "Panel Pterodactyl",
+                items: [
+                    { name: "Panel Pterodactyl - RAM Unli 1K (Garansi 3 Jam)", price: 1000 },
+                    { name: "Panel Pterodactyl - RAM Unli 2K (Garansi 3 Hari)", price: 2000 },
+                    { name: "Panel Pterodactyl - RAM Unli 3K (Garansi 1 Minggu)", price: 3000 }
+                ]
+            },
+            jasa: {
+                title: "Jasa & Script",
+                items: [
+                    { name: "Script Bot Tele - Build", price: 20000 },
+                    { name: "Script Bot Tele - Bug", price: 15000 },
+                    { name: "Script Bot Tele - Auto Order", price: 5000 },
+                    { name: "Jasa Nambahin Fitur di APK (3K/Fitur)", price: 3000 },
+                    { name: "Jasa Nambahin Fitur RAT", price: 10000 },
+                    { name: "Jasa Rombak UI", price: 10000 },
+                    { name: "Jasa Fix Error Base", price: 15000 },
+                    { name: "Jasa Fix Error API", price: 10000 },
+                    { name: "Jasa Build APK", price: 25000 },
+                    { name: "Jasa Bikin Script", price: 20000 }
+                ]
+            }
+        };
+
+        let currentProduct = null;
+        let orderHistory = JSON.parse(localStorage.getItem('bartzHistory')) || [];
+
+        // ==================== INTRO ANIMATION ====================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('intro-screen').classList.add('hidden');
+                document.getElementById('app-container').style.opacity = '1';
+                loadCategory('killer', document.querySelector('.cat-btn.active'));
+                renderHistory();
+            }, 2800);
+        });
+
+        // ==================== NAVIGASI PAGE ====================
+        function switchPage(pageId, btnElement) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(`page-${pageId}`).classList.add('active');
+
+            if (btnElement) {
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                btnElement.classList.add('active');
+            } else {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.textContent.toLowerCase().includes(pageId)) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+            document.querySelector('.page-content').scrollTop = 0;
+        }
+
+        // ==================== LOAD KATEGORI PRODUK ====================
+        function loadCategory(categoryKey, btnElement) {
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+
+            const category = products[categoryKey];
+            const listContainer = document.getElementById('product-list');
+            listContainer.innerHTML = '';
+
+            if (!category) return;
+
+            category.items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'product-item';
+                div.innerHTML = `
+                    <div class="product-item-info">
+                        <h4>${item.name}</h4>
+                        <div class="p-price">Rp ${item.price.toLocaleString('id-ID')}</div>
+                        <div class="p-stock"><i class="fas fa-check-circle" style="color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green);"></i> Tersedia</div>
+                    </div>
+                    <i class="fas fa-chevron-right arrow-icon"></i>
+                `;
+                div.onclick = () => openOrderModal(item);
+                listContainer.appendChild(div);
+            });
+        }
+
+        // ==================== MODAL ORDER ====================
+        function openOrderModal(item) {
+            currentProduct = item;
+            document.getElementById('selected-product').value = item.name;
+            document.getElementById('buyer-name').value = '';
+            document.getElementById('buyer-phone').value = '';
+            document.getElementById('qris-section').style.display = 'none';
+            
+            const select = document.getElementById('package-select');
+            select.innerHTML = `<option value="${item.price}">${item.name} - Rp ${item.price.toLocaleString('id-ID')}</option>`;
+
+            document.getElementById('order-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('order-modal').style.display = 'none';
+        }
+
+        // ==================== PROSES ORDER ====================
+        function processOrder() {
+            const name = document.getElementById('buyer-name').value.trim();
+            const phone = document.getElementById('buyer-phone').value.trim();
+            const productName = document.getElementById('selected-product').value;
+            const price = document.getElementById('package-select').value;
+
+            if (!name || !phone) {
+                showToast('Mohon isi Nama dan No. WhatsApp anda!', 'error');
+                return;
+            }
+
+            const adminPhone = '6281313416418';
+            const message = `Halo Admin Bartz Digital Store,%0A%0ASaya ingin order:%0A*Produk:* ${productName}%0A*Harga:* Rp ${parseInt(price).toLocaleString('id-ID')}%0A%0A*Data Pembeli:*%0A- Nama: ${name}%0A- No. WA: ${phone}%0A%0AMohon informasi pembayaran selanjutnya. Terima kasih.`;
+            
+            const waUrl = `https://wa.me/${adminPhone}?text=${message}`;
+            window.open(waUrl, '_blank');
+
+            const historyItem = {
+                product: productName,
+                price: parseInt(price),
+                date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }),
+                status: 'pending'
+            };
+            orderHistory.unshift(historyItem);
+            localStorage.setItem('bartzHistory', JSON.stringify(orderHistory));
+            renderHistory();
+
+            document.getElementById('qris-section').style.display = 'block';
+            document.getElementById('qris-section').scrollIntoView({ behavior: 'smooth' });
+            
+            showToast('Order berhasil! Lanjutkan pembayaran.', 'success');
+        }
+
+        // ==================== RIWAYAT ORDER ====================
+        function renderHistory() {
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+
+            if (orderHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-history">
+                        <i class="fas fa-inbox"></i>
+                        <p>Belum ada riwayat order</p>
+                    </div>
+                `;
+                return;
+            }
+
+            orderHistory.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <div class="history-info">
+                        <h4>${item.product}</h4>
+                        <p>${item.date} • Rp ${item.price.toLocaleString('id-ID')}</p>
+                    </div>
+                    <div class="history-status ${item.status === 'success' ? 'status-success' : 'status-pending'}">
+                        ${item.status === 'success' ? 'Berhasil' : 'Pending'}
+                    </div>
+                `;
+                historyList.appendChild(div);
+            });
+        }
+
+        function clearHistory() {
+            if (confirm('Yakin ingin menghapus semua riwayat?')) {
+                orderHistory = [];
+                localStorage.removeItem('bartzHistory');
+                renderHistory();
+                showToast('Riwayat berhasil dihapus', 'success');
+            }
+        }
+
+        // ==================== TOAST NOTIFICATION ====================
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = toast.querySelector('i');
+            
+            toastMessage.innerText = message;
+            
+            if (type === 'error') {
+                toast.style.background = 'linear-gradient(135deg, #ff2d95, #ff00e5)';
+                toast.style.boxShadow = '0 0 40px rgba(255, 0, 229, 0.6)';
+                toastIcon.className = 'fas fa-exclamation-circle';
+            } else if (type === 'info') {
+                toast.style.background = 'linear-gradient(135deg, #00f0ff, #a855f7)';
+                toast.style.boxShadow = '0 0 40px rgba(0, 240, 255, 0.6)';
+                toastIcon.className = 'fas fa-info-circle';
+            } else {
+                toast.style.background = 'linear-gradient(135deg, #00ff88, #00cc6a)';
+                toast.style.boxShadow = '0 0 40px rgba(0, 255, 136, 0.6)';
+                toastIcon.className = 'fas fa-check-circle';
+            }
+            
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('order-modal');
+            if (event.target === modal) closeModal();
+        }
+    </script>
+</body>
+</html>
